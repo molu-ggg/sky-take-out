@@ -12,6 +12,7 @@ import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.exception.SetmealEnableFailedException;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
@@ -34,8 +35,8 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Autowired
     private SetmealMapper setmealMapper;
-//    @Autowired
-//    private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private SetmealDishMapper setmealDishMapper;
     @Autowired
     private DishMapper dishMapper;
 
@@ -59,9 +60,10 @@ public class SetmealServiceImpl implements SetmealService {
         setmealDishes.forEach(setmealDish -> {
             setmealDish.setSetmealId(setmealId);
         });
+        System.out.println("处理关系");
 
         //保存套餐和菜品的关联关系
-//        setmealDishMapper.insertBatch(setmealDishes);
+        setmealDishMapper.insertBatch(setmealDishes);
     }
 
     /**
@@ -98,7 +100,7 @@ public class SetmealServiceImpl implements SetmealService {
             //删除套餐表中的数据
             setmealMapper.deleteById(setmealId);
             //删除套餐菜品关系表中的数据
-//            setmealDishMapper.deleteBySetmealId(setmealId);
+            setmealDishMapper.deleteBySetmealId(setmealId);
         });
     }
 
@@ -130,14 +132,14 @@ public class SetmealServiceImpl implements SetmealService {
         Long setmealId = setmealDTO.getId();
 
         //2、删除套餐和菜品的关联关系，操作setmeal_dish表，执行delete
-//        setmealDishMapper.deleteBySetmealId(setmealId);
+        setmealDishMapper.deleteBySetmealId(setmealId);
 
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
         setmealDishes.forEach(setmealDish -> {
             setmealDish.setSetmealId(setmealId);
         });
         //3、重新插入套餐和菜品的关联关系，操作setmeal_dish表，执行insert
-//        setmealDishMapper.insertBatch(setmealDishes);
+        setmealDishMapper.insertBatch(setmealDishes);
     }
 
     /**

@@ -42,8 +42,8 @@ public class DishController {
 
         Dish dish = new Dish(); // TODO 这里怎么又用了new
         dish.setCategoryId(categoryId);
-        dish.setStatus(StatusConstant.ENABLE);//查询起售中的菜品
-        List<DishVO> list = dishService.listWithFlavor(dish);
+        dish.setStatus(StatusConstant.ENABLE);//查询起售中的菜品 TODO 这里有什么作用呢
+        List<DishVO> list = dishService.listWithFlavor(dish); // 采用了模糊查询，并不是按照ID查询
 
         redisTemplate.opsForValue().set(key,list); //TODO 为什么list 用opsForValue
         return Result.success(list);

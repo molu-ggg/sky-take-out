@@ -12,16 +12,16 @@ import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
-import com.sky.mapper.EmployeeMapper;
+import com.sky.mapper.primary.EmployeeMapper;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import com.sky.context.BaseContext;
-import java.beans.beancontext.BeanContext;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,6 +29,7 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
+    @Qualifier("primary") // 指定注入 primary 数据源
     private EmployeeMapper employeeMapper;
 
     /**
@@ -51,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         //密码比对
-        // TODO 后期需要进行md5加密，然后再进行比对
+        // TODO 10 后期需要进行md5加密，然后再进行比对
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!password.equals(employee.getPassword())) {
             //密码错误
@@ -81,7 +82,6 @@ public class EmployeeServiceImpl implements EmployeeService {
          employee.setCreateTime(LocalDateTime.now());
          employee.setUpdateTime(LocalDateTime.now());
         // 记录当家创建人和更新人 id
-        // TODO 后续改成当前登录用户的ID
          employee.setCreateUser(BaseContext.getCurrentId());
          employee.setUpdateUser(BaseContext.getCurrentId());
 
@@ -98,6 +98,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         long total = page.getTotal();
         List <Employee> records = page.getResult();
+        System.out.println(page.size());
+        System.out.println(records.size());
         return new PageResult(total,records);
     }
     /**

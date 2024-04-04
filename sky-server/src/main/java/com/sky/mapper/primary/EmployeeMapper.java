@@ -1,4 +1,4 @@
-package com.sky.mapper;
+package com.sky.mapper.primary;
 
 import com.github.pagehelper.Page;
 import com.sky.dto.EmployeePageQueryDTO;

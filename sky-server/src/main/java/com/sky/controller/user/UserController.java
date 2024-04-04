@@ -40,6 +40,7 @@ public class UserController {
     public Result<UserLoginVO> login(@RequestBody UserLoginDTO userLoginDTO){
         log.info("微信用户登录：{}",userLoginDTO.getCode());
 
+
         //微信登录
         User user = userService.wxLogin(userLoginDTO);//后绪步骤实现
 

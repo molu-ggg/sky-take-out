@@ -32,7 +32,7 @@ public class CategoryController {
      */
     @PostMapping
     @ApiOperation("新增分类")
-    // TODO 为什么这里加入了 @RequestBody
+    // TODO 1 为什么这里加入了 @RequestBody 前端的请求体用的json格式
     public Result<String> save(@RequestBody CategoryDTO categoryDTO){
         log.info("新增分类：{}", categoryDTO);
         categoryService.save(categoryDTO);

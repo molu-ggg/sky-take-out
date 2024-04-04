@@ -1,22 +1,20 @@
 package com.sky.service.impl;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import com.sky.context.BaseContext;
-import com.sky.controller.user.ShoppingCartController;
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.ShoppingCart;
-import com.sky.mapper.DishMapper;
-import com.sky.mapper.SetmealMapper;
-import com.sky.mapper.ShoppingCartMapper;
+import com.sky.mapper.primary.DishMapper;
+import com.sky.mapper.primary.SetmealMapper;
+import com.sky.mapper.primary.ShoppingCartMapper;
 import com.sky.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.beans.beancontext.BeanContext;
 import java.time.LocalDateTime;
 import java.util.List;
 @Service
@@ -24,6 +22,7 @@ import java.util.List;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
+    @Qualifier("primary") // 指定注入 primary 数据源
     private ShoppingCartMapper shoppingCartMapper;
     @Autowired
     private DishMapper dishMapper;

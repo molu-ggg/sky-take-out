@@ -2,10 +2,11 @@ package com.sky.service.impl;
 
 import com.sky.context.BaseContext;
 import com.sky.entity.AddressBook;
-import com.sky.mapper.AddressBookMapper;
+import com.sky.mapper.primary.AddressBookMapper;
 import com.sky.service.AddressBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Slf4j
 public class AddressBookServiceImpl implements AddressBookService {
     @Autowired
+    @Qualifier("primary") // 指定注入 primary 数据源
     private AddressBookMapper addressBookMapper;
 
     /**

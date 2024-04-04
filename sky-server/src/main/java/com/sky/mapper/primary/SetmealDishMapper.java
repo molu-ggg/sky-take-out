@@ -1,4 +1,4 @@
-package com.sky.mapper;
+package com.sky.mapper.primary;
 
 import com.sky.entity.SetmealDish;
 import org.apache.ibatis.annotations.Delete;

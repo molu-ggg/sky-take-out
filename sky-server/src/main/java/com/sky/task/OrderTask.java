@@ -1,7 +1,7 @@
 package com.sky.task;
 
 import com.sky.entity.Orders;
-import com.sky.mapper.OrderMapper;
+import com.sky.mapper.primary.OrderMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -46,7 +46,7 @@ public class OrderTask {
     @Scheduled(cron = "0 0 1 * * ?")
     public void processDeliveryOrder(){
         log.info("处理派送中订单：{}", new Date());
-        // select * from orders where status = 4 and order_time < 当前时间-1小时 //TODO 为什么把大于一个小时的当做是完成订单
+        // select * from orders where status = 4 and order_time < 当前时间-1小时 //TODO 11 为什么把大于一个小时的当做是完成订单： 因为有的用户收获后不点击确认收货，所以我们手动给他完成订单。
         LocalDateTime time = LocalDateTime.now().plusMinutes(-60);
         List<Orders> ordersList = orderMapper.getByStatusAndOrdertimeLT(Orders.DELIVERY_IN_PROGRESS, time);
 

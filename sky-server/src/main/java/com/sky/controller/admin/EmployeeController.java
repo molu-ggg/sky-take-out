@@ -42,8 +42,14 @@ public class EmployeeController {
      */
     @PostMapping("/login")
     @ApiOperation(value =  "员工登录")
-    public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
+//    public Result<EmployeeLoginVO> login(@RequestParam String username,@RequestParam String password ) {
+      public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO){
         log.info("员工登录：{}", employeeLoginDTO);
+//        System.out.println(username);
+//        System.out.println(password);
+//        EmployeeLoginDTO employeeLoginDTO = new EmployeeLoginDTO();
+//        employeeLoginDTO.setPassword(password);
+//        employeeLoginDTO.setUsername(username);
 
         Employee employee = employeeService.login(employeeLoginDTO);
 
@@ -108,8 +114,8 @@ public class EmployeeController {
 
         return Result.success(employee);
     }
-
-    @PutMapping //TODO 为什么用putmapping
+//    @PostMapping("/update")
+    @PutMapping //TODO  3 为什么用putmapping ? 一般对数据的更新有put，用post也可以，要与前端说明好（定义接口）
     @ApiOperation("编辑员工信息")
     public Result update(@RequestBody EmployeeDTO employeeDTO){
         log.info("编辑员工信息：{}", employeeDTO);

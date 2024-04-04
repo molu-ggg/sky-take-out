@@ -1,4 +1,4 @@
-package com.sky.mapper;
+package com.sky.mapper.primary;
 
 import java.util.List;
 import java.util.Map;

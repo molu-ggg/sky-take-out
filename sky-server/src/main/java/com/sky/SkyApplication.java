@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication
+@SpringBootApplication // # = SpringBootConfiguration @EnableAutoConfiguration @ComponentScan( 默认扫描添加所在类同一级的包以及子包）
 @EnableTransactionManagement //开启注解方式的事务管理
 @Slf4j
 @EnableCaching // 开启缓存注解

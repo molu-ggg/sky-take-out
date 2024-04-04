@@ -6,11 +6,12 @@ import com.sky.constant.MessageConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
 import com.sky.exception.LoginFailedException;
-import com.sky.mapper.UserMapper;
+import com.sky.mapper.primary.UserMapper;
 import com.sky.properties.WeChatProperties;
 import com.sky.service.UserService;
 import com.sky.utils.HttpClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class UserServiceImpl  implements UserService {
     public static final String WX_LOGIN = "https://api.weixin.qq.com/sns/jscode2session";
     @Autowired
+    @Qualifier("primary") // 指定注入 primary 数据源
     private WeChatProperties weChatProperties;
     @Autowired
     private UserMapper userMapper;

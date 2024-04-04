@@ -24,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class CommonController {
 
-//    @Autowired // TODO 这个地方依赖注入有问题
+//    @Autowired // TODO 2 这个地方依赖注入有问题 因为AliOssUtil是@Data并没有由spring bean容器管理
     public AliOssUtil aliOssUtil = new AliOssUtil();
 
     /**

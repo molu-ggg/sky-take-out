@@ -10,15 +10,17 @@ import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
-import com.sky.mapper.DishFlavorMapper;
-import com.sky.mapper.DishMapper;
-import com.sky.mapper.SetmealMapper;
+import com.sky.mapper.primary.DishFlavorMapper;
+import com.sky.mapper.primary.DishMapper;
+import com.sky.mapper.primary.SetmealDishMapper;
+import com.sky.mapper.primary.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,11 +32,12 @@ import java.util.List;
 public class DishServiceImpl implements DishService {
 
     @Autowired
+    @Qualifier("primary") // 指定注入 primary 数据源
     private DishMapper dishMapper;
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
-//    @Autowired
-//    private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private SetmealDishMapper setmealDishMapper;
     @Autowired
     private SetmealMapper setmealMapper;
 
@@ -94,12 +97,12 @@ public class DishServiceImpl implements DishService {
             }
         }
 
-//        //判断当前菜品是否能够删除---是否被套餐关联了？？
-//        List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
-//        if (setmealIds != null && setmealIds.size() > 0) {
-//            //当前菜品被套餐关联了，不能删除
-//            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
-//        }
+        //判断当前菜品是否能够删除---是否被套餐关联了？？
+        List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
+        if (setmealIds != null && setmealIds.size() > 0) {
+            //当前菜品被套餐关联了，不能删除
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
 
         //删除菜品表中的菜品数据
         for (Long id : ids) {
@@ -169,23 +172,23 @@ public class DishServiceImpl implements DishService {
                 .status(status)
                 .build();
         dishMapper.update(dish);
-//
-//        if (status == StatusConstant.DISABLE) {
-//            // 如果是停售操作，还需要将包含当前菜品的套餐也停售
-//            List<Long> dishIds = new ArrayList<>();
-//            dishIds.add(id);
-//            // select setmeal_id from setmeal_dish where dish_id in (?,?,?)
-//            List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(dishIds);
-//            if (setmealIds != null && setmealIds.size() > 0) {
-//                for (Long setmealId : setmealIds) {
-//                    Setmeal setmeal = Setmeal.builder()
-//                            .id(setmealId)
-//                            .status(StatusConstant.DISABLE)
-//                            .build();
-//                    setmealMapper.update(setmeal);
-//                }
-//            }
-//        }
+
+        if (status == StatusConstant.DISABLE) {
+            // 如果是停售操作，还需要将包含当前菜品的套餐也停售
+            List<Long> dishIds = new ArrayList<>();
+            dishIds.add(id);
+            // select setmeal_id from setmeal_dish where dish_id in (?,?,?)
+            List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(dishIds);
+            if (setmealIds != null && setmealIds.size() > 0) {
+                for (Long setmealId : setmealIds) {
+                    Setmeal setmeal = Setmeal.builder()
+                            .id(setmealId)
+                            .status(StatusConstant.DISABLE)
+                            .build();
+                    setmealMapper.update(setmeal);
+                }
+            }
+        }
     }
 
     /**
@@ -208,7 +211,7 @@ public class DishServiceImpl implements DishService {
      * @return
      */
     public List<DishVO> listWithFlavor(Dish dish) {
-        List<Dish> dishList = dishMapper.list(dish); //TODO 这里为什么是dish dishvo 不行吗 难道遵循实体类和mysql一致吗
+        List<Dish> dishList = dishMapper.list(dish); //TODO 9 这里为什么是dish dishvo 不行吗 难道遵循实体类和mysql一致吗：mapper段尽量查询与数据库一直的表，然后在service处理
 
         List<DishVO> dishVOList = new ArrayList<>();
 
